@@ -1,6 +1,7 @@
 package commands
 
 import state.State
+import _root_.commands.commands.Go
 
 object CommandMode extends Enumeration {
   type CommandMode = Value
@@ -40,6 +41,8 @@ class ExploreCommands extends CommandFactory {
       new Help()
     } else if (name == "status") {
       new Status()
+    } else if (name == "go") {
+      new Go()
     } else {
       new UnknownCommand()
     }
