@@ -8,6 +8,10 @@ import state.GameState
 
 class CreateCharacter(input: String) extends Command {
   def exec(state: State, arguments: List[String]): State = {
-    new State(s"Greetings ${input}. Type 'help' to see list of commands!", CommandMode.ExploreMode, new GameState(new Creature(input)))
+    new State(
+      s"Greetings ${input}. Type 'help' to see list of commands!",
+      CommandMode.ExploreMode,
+      state.gameState.createCharacter(new Creature(input))
+    )
   }
 }

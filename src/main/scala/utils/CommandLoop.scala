@@ -5,9 +5,10 @@ import commands.Command
 
 object CommandLoop {
   def run(
-      state: State = State.empty,
+      state: State,
       exitKeyword: String = "exit"
   ): State = {
+    println(state.message)
     val input = Input.parse(IOService.read)
 
     if (input.value == exitKeyword) {
@@ -17,7 +18,6 @@ object CommandLoop {
         .get(state, input.value)
         .exec(state, input.arguments)
 
-      println(newState.message)
       run(
         newState
       )
