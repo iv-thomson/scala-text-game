@@ -14,7 +14,7 @@ object CommandLoop {
       state
     } else {
       val newState = Command
-        .getFromState(state, input.value)
+        .get(state, input.value)
         .exec(state, input.arguments)
 
       println(newState.message)
