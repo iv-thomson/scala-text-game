@@ -47,7 +47,7 @@ class GameState(
     val cells = getNeighbours
 
     (for (i <- cells.indices)
-      yield s"$i) " + cells(i).location.name).mkString("\n" + " " * 8)
+      yield s"${i + 1}) " + cells(i).location.name).mkString("\n" + " " * 8)
 
   }
 }
