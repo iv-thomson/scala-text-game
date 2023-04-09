@@ -12,7 +12,7 @@ object Main extends App {
     new State(
       "Welcome to the Text game. Please enter your name:",
       CommandMode.CharacterCreationMode,
-      new GameState(Creature.empty, map, map.cells(0).id)
+      new GameState(Creature.empty, map, map.cells(0))
     )
   )
 }

@@ -4,24 +4,21 @@ import domain.Creature
 import domain.AdventureMap
 import utils.JsonMapRepository
 import domain.Cell
+import domain.Location
 
 class GameState(
     val player: Creature = Creature.empty,
     val adventureMap: AdventureMap,
-    val currentLocation: String
+    val currentLocation: Cell
 ) {
   def createCharacter(character: Creature): GameState =
     new GameState(character, adventureMap, currentLocation)
 
   def go(locationIndex: Int): GameState = {
     getNeighbour(locationIndex) match {
-      case Some(value) => new GameState(player, adventureMap, value.id)
+      case Some(value) => new GameState(player, adventureMap, value)
       case None        => new GameState(player, adventureMap, currentLocation)
     }
-  }
-
-  def getCurrentLocation = {
-    val location = adventureMap.cells.find(_.id == currentLocation)
   }
 
   def getStatus(): String = {
@@ -30,36 +27,27 @@ class GameState(
         - name: ${player.name}
         - health: ${player.health}
 
-        ${printAvailableLocations}
-    """
+        You are now in ${currentLocation.location.name}
+
+        From here you can go to following places:
+        ${printAvailableLocations}"""
   }
 
   def getNeighbour(index: Int): Option[Cell] = {
-    val neighbourCells = getNeighbours
-
-    neighbourCells.lift(index)
+    getNeighbours.lift(index)
   }
 
-  def getNeighbours(): List[Cell] = {
-    getAvailableLocations match {
-      case Some(value) => value
-      case None        => List.empty
-    }
-  }
-
-  def getAvailableLocations: Option[List[Cell]] = {
-    val location = adventureMap.cells.find(_.id == currentLocation)
-    location.map(
-      _.neighbours.flatMap((neighbourId) =>
-        adventureMap.cells.find(_.id == neighbourId)
-      )
+  private def getNeighbours: List[Cell] = {
+    currentLocation.neighbours.flatMap((neighbourId) =>
+      adventureMap.cells.find(_.id == neighbourId)
     )
   }
 
-  def printAvailableLocations = {
-    getAvailableLocations match {
-      case Some(value) => value.map(_.location.name).mkString("\n" + " " * 8)
-      case None        => "Something went wrong. Couldn't get locations"
-    }
+  private def printAvailableLocations = {
+    val cells = getNeighbours
+
+    (for (i <- cells.indices)
+      yield s"$i) " + cells(i).location.name).mkString("\n" + " " * 8)
+
   }
 }
