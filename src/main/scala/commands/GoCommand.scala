@@ -17,12 +17,12 @@ class Go extends Command {
   }
 
   def handleLocationChange(index: Int, state: State): State = {
-    state.gameState.getNeighbour(index) match {
+    state.gameState.go(index) match {
       case Some(value) =>
         new State(
-          s"You went to ${value.location.name}\n${value.location.description}",
+          s"You went to ${value.currentLocation.location.name}\n${value.currentLocation.location.description}",
           state.mode,
-          state.gameState.go(index)
+          value
         )
       case None => state.sendMessage("You didn't go anywhere.")
     }

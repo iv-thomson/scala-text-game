@@ -5,6 +5,7 @@ import domain.AdventureMap
 import utils.JsonMapRepository
 import domain.Cell
 import domain.Location
+import domain.MapNavigationService
 
 class GameState(
     val player: Creature = Creature.empty,
@@ -14,11 +15,15 @@ class GameState(
   def createCharacter(character: Creature): GameState =
     new GameState(character, adventureMap, currentLocation)
 
-  def go(locationIndex: Int): GameState = {
-    getNeighbour(locationIndex) match {
-      case Some(value) => new GameState(player, adventureMap, value)
-      case None        => new GameState(player, adventureMap, currentLocation)
-    }
+  def go(locationIndex: Int): Option[GameState] = {
+    MapNavigationService
+      .getNeighbour(
+        locationIndex,
+        currentLocation,
+        adventureMap
+      )
+      .map(new GameState(player, adventureMap, _))
+
   }
 
   def getStatus(): String = {
@@ -30,24 +35,10 @@ class GameState(
         You are now in ${currentLocation.location.name}
 
         From here you can go to following places:
-        ${printAvailableLocations}"""
+        ${MapNavigationService.printAvailableLocations(
+        currentLocation,
+        adventureMap
+      )}"""
   }
 
-  def getNeighbour(index: Int): Option[Cell] = {
-    getNeighbours.lift(index)
-  }
-
-  private def getNeighbours: List[Cell] = {
-    currentLocation.neighbours.flatMap((neighbourId) =>
-      adventureMap.cells.find(_.id == neighbourId)
-    )
-  }
-
-  private def printAvailableLocations = {
-    val cells = getNeighbours
-
-    (for (i <- cells.indices)
-      yield s"${i + 1}) " + cells(i).location.name).mkString("\n" + " " * 8)
-
-  }
 }
