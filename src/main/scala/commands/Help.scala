@@ -7,6 +7,7 @@ class Help extends Command {
     state.sendMessage("""
         You're in exploration mode now. Here's list of available commands:
         - status - see your current status
+        - go <index> - go to the location (see available location lists using 'status' command)
     """)
   }
 }
