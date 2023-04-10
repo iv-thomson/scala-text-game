@@ -6,9 +6,9 @@ import state.State
 
 class Go extends Command {
   def exec(state: State, arguments: List[String]): State = {
-    val index = arguments(0).toIntOption
+    val index = arguments.lift(0).flatMap(_.toIntOption)
     index match {
-      case Some(value) => handleLocationChange(value, state)
+      case Some(value) => handleLocationChange(value - 1, state)
       case None =>
         state.sendMessage(
           "Please provide a number matching a location. To see all locations type 'status'"
