@@ -1,5 +1,6 @@
 package domain
 
+// TODO: Might want to move this logic into AdventureMap
 object MapNavigationService {
 
   def getNeighbour(
