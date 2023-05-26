@@ -6,6 +6,9 @@ import domain.AdventureMap
 
 import spray.json._
 import scala.io.Source
+import scala.util.Success
+import scala.util.Failure
+import scala.concurrent.Future
 
 object MyJsonProtocol extends DefaultJsonProtocol {
   implicit val locationFormat = jsonFormat4(Location)
@@ -16,11 +19,7 @@ object MyJsonProtocol extends DefaultJsonProtocol {
 import MyJsonProtocol._
 
 object JsonMapRepository {
-  def readMap: AdventureMap = {
-
-    val fileContents =
-      Source.fromFile("./output/adventureMap.json").getLines.mkString
-
-    fileContents.parseJson.convertTo[AdventureMap]
+  def readMap: Future[AdventureMap] = {
+    HttpService.getAdventure
   }
 }

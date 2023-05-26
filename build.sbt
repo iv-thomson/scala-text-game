@@ -1,4 +1,3 @@
-
 // The simplest possible sbt build file is just one line:
 
 scalaVersion := "2.13.8"
@@ -21,14 +20,19 @@ version := "1.0"
 // mostly only necessary if you intend to publish your library's binaries on a
 // place like Sonatype.
 
-
 // Want to use a published library in your project?
 // You can define other libraries as dependencies in your build like this:
-
-libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.1.1"
-
 libraryDependencies += "io.spray" %%  "spray-json" % "1.3.6"
+val akkaVersion = "2.5.26"
+val akkaHttpVersion = "10.1.11"
 
+libraryDependencies ++= Seq(
+  // akka streams
+  "com.typesafe.akka" %% "akka-stream" % akkaVersion,
+  // akka http
+  "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
+  "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
+)
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the scala-parser-combinators dependency to the set of dependencies
 // that sbt will go and fetch when it starts up.
